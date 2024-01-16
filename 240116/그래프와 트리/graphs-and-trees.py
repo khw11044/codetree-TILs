@@ -1,5 +1,22 @@
 from collections import deque 
 
+import sys
+
+
+def bfs(x):
+    isTree = True
+    q = [x]
+    while q:
+        now = q.pop(0)
+        if visited[now] == 1:  # 현재 정점을 이미 다른 요소를 통해 방문했다면(싸이클을 이룬다면)
+            isTree = False  # 트리가 아님을 표시해준다.
+        visited[now] = 1
+        for j in graph[now]:
+            if visited[j] == 0:
+                q.append(j)
+    return isTree
+
+
 if __name__=="__main__":
     n,m=map(int, input().split())
     graph = [[] for _ in range(n+1)]
@@ -9,18 +26,11 @@ if __name__=="__main__":
         graph[a].append(b)
         graph[b].append(a)
 
-    Q=deque()
-    cnt=0
-    for i in range(1,n+1):
-        if visited[i]==0:
-            Q.append(i)
-            visited[i]=1
-            while Q:
-                v=Q.popleft()
-                for e in graph[v]:
-                    Q.append(e)
-                    visited[e]=1
-        
-        cnt+=1 
-    
-    print(cnt)
+    treeCnt = 0
+    for i in range(1, n + 1):
+        if visited[i] == 1:  # 방문한적 있다면 패스
+            continue
+        if bfs(i) is True:  # 현재의 연결 요소가 tree 라면 카운트
+            treeCnt += 1
+            
+    print(treeCnt)
