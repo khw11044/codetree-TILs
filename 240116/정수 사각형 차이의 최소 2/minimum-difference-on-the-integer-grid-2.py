@@ -1,70 +1,35 @@
-import sys
+import sys 
 
-INT_MAX = sys.maxsize
-MAX_R = 100
+def in_range(nx,ny):
+    return 0<=nx<n and 0<=ny<n 
 
-# 변수 선언 및 입력:
-n = int(input())
-num = [
-    list(map(int, input().split()))
-    for _ in range(n)
-]
-dp = [
-    [
-        [INT_MAX] * (MAX_R + 1)
-        for _ in range(n)
-    ]
-    for _ in range(n)
-]
+dxs=[0,1]
+dys=[1,0]
 
-def initialize():
-    # 전부 INT_MAX로 초기화합니다.
-    for i in range(n):
-        for j in range(n):
-            for k in range(1, MAX_R + 1):
-                dp[i][j][k] = INT_MAX
+def DFS(x,y):
+    global ans
+    if x==n-1 and y==n-1:
+        ans = min(ans, abs(max(res)-min(res)))
+        return ans
+    for dx,dy in zip(dxs,dys):
+        nx=x+dx
+        ny=y+dy
+        
+        if in_range(nx,ny) and dp[nx][ny]==0:
+            dp[nx][ny]=1
+            res.append(board[nx][ny])
+            DFS(nx,ny)
+            dp[nx][ny]=0
+            res.pop()
 
-    # 시작점의 경우 dp[0][0][num[0][0]] = num[0][0]으로 초기값을 설정해줍니다
-    dp[0][0][num[0][0]] = num[0][0]
-
-    # 최좌측 열의 초기값을 설정해줍니다.
-    for i in range(1, n):
-        for k in range(1, MAX_R + 1):
-            dp[i][0][min(k, num[i][0])] = min(
-                dp[i][0][min(k, num[i][0])],
-                max(dp[i - 1][0][k], num[i][0])
-            )
-
-    # 최상단 행의 초기값을 설정해줍니다.
-    for j in range(1, n):
-        for k in range(1, MAX_R + 1):
-            dp[0][j][min(k, num[0][j])] = min(
-                dp[0][j][min(k, num[0][j])],
-                max(dp[0][j - 1][k], num[0][j])
-            )
-
-def solve():
-    # DP 초기값 설정
-    initialize()
-
-    # 탐색하는 위치의 위에 값과 좌측 값 중에 작은 값과
-    # 해당 위치의 숫자 중에 최댓값을 구해줍니다.
-    for i in range(1, n):
-        for j in range(1, n):
-            for k in range(1, MAX_R + 1):
-                dp[i][j][min(k, num[i][j])] = min(
-                    dp[i][j][min(k, num[i][j])],
-                    max(min(dp[i - 1][j][k], dp[i][j - 1][k]), num[i][j])
-                )
-
-   
-# DP로 문제를 해결합니다.
-solve()
-
-# 가능한 답 중 최적의 답을 계산합니다.
-ans = INT_MAX
-for k in range(1, MAX_R + 1):
-    if dp[n - 1][n - 1][k] != INT_MAX:
-        ans = min(ans, dp[n - 1][n - 1][k] - k)
-
-print(ans)
+if __name__=="__main__":
+    n = int(input())
+    board = [list(map(int, input().split())) for _ in range(n)]
+    
+    dp=[[0]*n for _ in range(n)]
+    dp[0][0] = board[0][0]
+    
+    ans=sys.maxsize
+    res=[board[0][0]]
+    DFS(0,0)
+    print(ans)
