@@ -1,36 +1,39 @@
-from collections import deque 
-
 import sys
 
-
-def bfs(x):
-    isTree = True
-    q = [x]
-    while q:
-        now = q.pop(0)
-        if visited[now] == 1:  # 현재 정점을 이미 다른 요소를 통해 방문했다면(싸이클을 이룬다면)
-            isTree = False  # 트리가 아님을 표시해준다.
-        visited[now] = 1
-        for j in graph[now]:
-            if visited[j] == 0:
-                q.append(j)
-    return isTree
+def union(x,y):
+    x = find(x)
+    y = find(y)
+    if x < y:
+        parents[y] = x
+    else:
+        parents[x] = y
+    
+def find(x):
+    if x != parents[x]:
+        parents[x] = find(parents[x])
+    return parents[x]
 
 
 if __name__=="__main__":
     n,m=map(int, input().split())
-    graph = [[] for _ in range(n+1)]
-    visited = [0]*(n+1)
+    parents = [i for i in range(n+1)]
+    cycle = set()
+    
     for _ in range(m):
-        a,b=map(int, input().split())
-        graph[a].append(b)
-        graph[b].append(a)
-
-    treeCnt = 0
-    for i in range(1, n + 1):
-        if visited[i] == 1:  # 방문한적 있다면 패스
-            continue
-        if bfs(i) is True:  # 현재의 연결 요소가 tree 라면 카운트
-            treeCnt += 1
-            
-    print(treeCnt)
+        a,b = map(int,input().split())
+        if find(a) == find(b):
+            cycle.add(parents[a])
+            cycle.add(parents[b])
+        # 두 정점 중 하나가 사이클에 포함되는 정점이라면 나머지 정점도 사이클로 포함한다.
+        if parents[a] in cycle or parents[b] in cycle: 
+            cycle.add(parents[a])
+            cycle.add(parents[b])
+        union(a,b)
+        
+    for i in range(n+1):
+        find(i)
+    
+    parents = set(parents)
+    ans = sum([1 if i not in cycle else 0 for i in parents])-1
+    
+    print(ans)
