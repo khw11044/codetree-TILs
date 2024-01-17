@@ -51,6 +51,7 @@ if __name__=="__main__":
 
 
     # 1번 정점으로부터 가장 멀리 있는 정점 정보를 찾습니다.
-    f_vertex, diameter = find_largest_vertex(1)
+    f_vertex, _ = find_largest_vertex(1)
+    _, diameter = find_largest_vertex(f_vertex)
 
     print(diameter)
