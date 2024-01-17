@@ -8,17 +8,17 @@ def DFS(x):
     # x번 노드가 리프노드인지 판단합니다. 자신의 자식 노드가
     # 하나라도 남아 있을 경우 x번 노드는 리프노드가 아닙니다.
     is_leaf = True
-    if len(graph[x]) != 0:      # 연결된 자식 노드가 하나라도 있으면 
-        for y in graph[x]:
-            # 삭제된 노드는 스킵합니다.
-            if is_deleted[y]: 
-                continue
-            DFS(y)
+    for y in graph[x]:
+        # 삭제된 노드는 스킵합니다.
+        if is_deleted[y]: 
+            continue
+        DFS(y)
 
-            is_leaf = False
-    else:       # 연결된 자식 노드가 없으면 즉, 리프노드이면 
-        if is_leaf: 
-            ans += 1
+        is_leaf = False
+
+    # 자신 노드가 리프 노드일 경우 답을 갱신합니다.
+    if is_leaf: 
+        ans += 1
 
 if __name__=="__main__":
     n = int(input())
