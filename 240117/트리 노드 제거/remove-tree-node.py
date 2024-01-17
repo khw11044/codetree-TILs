@@ -8,13 +8,14 @@ def DFS(x):
     # x번 노드가 리프노드인지 판단합니다. 자신의 자식 노드가
     # 하나라도 남아 있을 경우 x번 노드는 리프노드가 아닙니다.
     is_leaf = True
-    for y in graph[x]:
-        # 삭제된 노드는 스킵합니다.
-        if is_deleted[y]: 
-            continue
-        DFS(y)
+    if graph[x]:
+        for y in graph[x]:
+            # 삭제된 노드는 스킵합니다.
+            if is_deleted[y]: 
+                continue
+            DFS(y)
 
-        is_leaf = False
+            is_leaf = False
 
     # 자신 노드가 리프 노드일 경우 답을 갱신합니다.
     if is_leaf: 
