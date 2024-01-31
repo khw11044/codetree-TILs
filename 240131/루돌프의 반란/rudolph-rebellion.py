@@ -40,7 +40,7 @@ def Interaction(crush_new_santa_num,dict_x,dict_y):
     if not in_range(new_x,new_y):
         santa[crush_new_santa_num] = [-1,-1]      # 보드 밖으로 나감
     else:
-        TF, p_num = check(new_x,new_y)              # 새 위치에 산타가 있는지 없는지 확인 
+        TF, p_num = check(crush_new_santa_num,new_x,new_y)              # 새 위치에 산타가 있는지 없는지 확인 
         if not TF:                                  # 있는경우 상호작용 
             Interaction(p_num,dict_x,dict_y)
         else:
@@ -58,9 +58,10 @@ def cow_crash(cow_loc,x1,y1,p_num,x2,y2,k):
     
     if not in_range(x2,y2):
         del santa[p_num]      # 보드 밖으로 나감 
+        faint[p_num] = 0
     else:
         faint[p_num] = 2            # 기절  # 두턴뒤에 풀림 
-        TF,crush_new_santa_num = check(x2,y2)
+        TF,crush_new_santa_num = check(p_num,x2,y2)
         if not TF:
             # 상호작용 crush_new_santa_num
             Interaction(crush_new_santa_num,dict_x,dict_y)
@@ -78,9 +79,10 @@ def santa_crash(p_num,x1,y1,k):
     
     if not in_range(x1,y1):
         del santa[p_num]      # 보드 밖으로 나감 
+        faint[p_num] = 0
     else:
         faint[p_num] = 1            # 기절  # 두턴뒤에 풀림 
-        TF,crush_new_santa_num = check(x1,y1)
+        TF,crush_new_santa_num = check(p_num,x1,y1)
         if not TF:
             # 상호작용 crush_new_santa_num
             Interaction(crush_new_santa_num,dict_x,dict_y)
@@ -91,13 +93,15 @@ def santa_crash(p_num,x1,y1,k):
 def in_range(x,y):
     return 0<x<N+1 and 0<y<N+1
 
-def check(x1,y1):
+def check(p_num,x1,y1):
     for i in santa:
+        if i == p_num:
+            continue
         if santa[i] == [x1,y1]:
             return False, i
     return True, 0
 
-def santa_move_rule(x1,y1,x2,y2):
+def santa_move_rule(p_num,x1,y1,x2,y2):
     dis = (x1-x2)**2 + (y1-y2)**2
     new_x,new_y=x1,y1
     for dx,dy in zip(sdxs,sdys):
@@ -105,10 +109,10 @@ def santa_move_rule(x1,y1,x2,y2):
         ny=y1+dy
         
         if in_range(nx,ny):
-            TF,_ = check(nx,ny)
-            if TF:
-                new_dis = (nx-x2)**2 + (ny-y2)**2
-                if new_dis < dis:
+            new_dis = (nx-x2)**2 + (ny-y2)**2
+            if new_dis < dis:
+                TF,_ = check(p_num,nx,ny)
+                if TF:
                     dis = new_dis
                     new_x,new_y=nx,ny
     return new_x,new_y                
@@ -155,7 +159,7 @@ def santa_move(cow_loc,k):
         
         x1,y1=santa[i]
         board[x1][y1] = 0
-        x1,y1 = santa_move_rule(x1,y1,x2,y2)
+        x1,y1 = santa_move_rule(i,x1,y1,x2,y2)
         
         # 산타가 움직였는데 루돌프랑 부딪칠 경우 
         if [x1,y1] == [x2,y2]:
