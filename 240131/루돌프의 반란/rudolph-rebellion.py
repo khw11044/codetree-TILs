@@ -44,8 +44,8 @@ def Interaction(crush_new_santa_num,dict_x,dict_y):
         TF, p_num = check(crush_new_santa_num,new_x,new_y)              # 새 위치에 산타가 있는지 없는지 확인 
         if not TF:                                  # 있는경우 상호작용 
             Interaction(p_num,dict_x,dict_y)
-        else:
-            santa[crush_new_santa_num] = [new_x,new_y]
+        
+        santa[crush_new_santa_num] = [new_x,new_y]  # 상호작용이랑 상관없이 이동할건 해야지
             
         
 
@@ -199,9 +199,9 @@ if __name__=="__main__":
     #print_board(board)
     for k in range(1,M+1):
         # 루돌프 움직이고 
-        # if k == 4:
+        # if k == 5:
         #     print()
-        #print('time',k)
+        # print('time',k)
         board[cow_loc[0]][cow_loc[1]] = 0
         cow_loc = cow_move(cow_loc,k)
         board[cow_loc[0]][cow_loc[1]] = -1
@@ -211,8 +211,8 @@ if __name__=="__main__":
         
         # 1번 산타부터 P번산타까지 산타들 움직임 
         santa_move(cow_loc,k)
-        #print('santa move')
-        #print_board(board)
+        # print('santa move')
+        # print_board(board)
         
         if len(santa)==0:
             break
@@ -220,7 +220,7 @@ if __name__=="__main__":
         for pid in santa:
             santa_score[pid] += 1
 
-        #print('santa_score',santa_score)
-        #print('>>>>>>>>>>>>>>>>>')
+        # print('santa_score',santa_score)
+        # print('>>>>>>>>>>>>>>>>>')
         
     print(*santa_score[1:])
