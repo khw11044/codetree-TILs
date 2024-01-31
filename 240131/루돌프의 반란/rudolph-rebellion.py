@@ -59,14 +59,14 @@ def cow_crash(cow_loc,x1,y1,p_num,x2,y2,k):
     if not in_range(x2,y2):
         del santa[p_num]      # 보드 밖으로 나감 
     else:
-        faint[p_num] += 2 # k+1            # 기절  # 두턴뒤에 풀림 
+        faint[p_num] = 2            # 기절  # 두턴뒤에 풀림 
         TF,crush_new_santa_num = check(x2,y2)
         if not TF:
             # 상호작용 crush_new_santa_num
             Interaction(crush_new_santa_num,dict_x,dict_y)
 
         santa[p_num] = [x2,y2]  # 상호작용이랑 상관없이 이동할건 해야지
-        
+        board[x2][y2] = p_num
 
 def santa_crash(p_num,x1,y1,k):
     santa_score[p_num] += D
@@ -79,7 +79,7 @@ def santa_crash(p_num,x1,y1,k):
     if not in_range(x1,y1):
         del santa[p_num]      # 보드 밖으로 나감 
     else:
-        faint[p_num] += 1 # k+1            # 기절  # 두턴뒤에 풀림 
+        faint[p_num] = 1            # 기절  # 두턴뒤에 풀림 
         TF,crush_new_santa_num = check(x1,y1)
         if not TF:
             # 상호작용 crush_new_santa_num
@@ -154,7 +154,7 @@ def santa_move(cow_loc,k):
             continue
         
         x1,y1=santa[i]
-        
+        board[x1][y1] = 0
         x1,y1 = santa_move_rule(x1,y1,x2,y2)
         
         # 산타가 움직였는데 루돌프랑 부딪칠 경우 
@@ -167,7 +167,9 @@ def santa_move(cow_loc,k):
 def print_board(board):
     for b in board:
         print(b)
-    print('--------------')        
+    print()
+    print('--------------')   
+    print()     
 
 if __name__=="__main__":
     # N:게임격자, M: 게임턴수, P:산타개수, C:루돌프 힘, D: 산타의 힘
@@ -189,16 +191,21 @@ if __name__=="__main__":
 
     total_score = 0
     # 게임 플레이수 M
+    #print_board(board)
     for k in range(1,M+1):
         # 루돌프 움직이고 
+        #print('time',k)
         board[cow_loc[0]][cow_loc[1]] = 0
         cow_loc = cow_move(cow_loc,k)
         board[cow_loc[0]][cow_loc[1]] = -1
+        #print_board(board)
         if len(santa)==0:
             break
         
         # 1번 산타부터 P번산타까지 산타들 움직임 
         santa_move(cow_loc,k)
+        #print('santa move')
+        #print_board(board)
         
         if len(santa)==0:
             break
