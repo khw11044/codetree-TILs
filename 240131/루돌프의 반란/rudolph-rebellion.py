@@ -1,6 +1,5 @@
 import sys
 
-
 dxs = [0,1,1,1,0,-1,-1,-1]
 dys = [1,1,0,-1,-1,-1,0,1]
 
@@ -12,7 +11,7 @@ def select_santa(cow):
     close_dis=2500
     select_santa_num=0
     select_santa_loc=[0,0]
-    for i in range(1,P+1):
+    for i in santa:
         r2,c2 = santa[i]
         if r2==-1 and c2==-1:               # 이미 경기장 밖으로 나감 
             continue
@@ -56,9 +55,9 @@ def cow_crash(cow_loc,x1,y1,p_num,x2,y2,k):
     y2 += dict_y*C
     
     if not in_range(x2,y2):
-        santa[p_num] = [-1,-1]      # 보드 밖으로 나감 
+        del santa[p_num]      # 보드 밖으로 나감 
     else:
-        faint[p_num] = 2 # k+1            # 기절  # 두턴뒤에 풀림 
+        faint[p_num] += 2 # k+1            # 기절  # 두턴뒤에 풀림 
         TF,crush_new_santa_num = check(x2,y2)
         if not TF:
             # 상호작용 crush_new_santa_num
@@ -76,9 +75,9 @@ def santa_crash(p_num,x1,y1,k):
     y1 += dict_y*D
     
     if not in_range(x1,y1):
-        santa[p_num] = [-1,-1]      # 보드 밖으로 나감 
+        del santa[p_num]      # 보드 밖으로 나감 
     else:
-        faint[p_num] = 1 # k+1            # 기절  # 두턴뒤에 풀림 
+        faint[p_num] += 1 # k+1            # 기절  # 두턴뒤에 풀림 
         TF,crush_new_santa_num = check(x1,y1)
         if not TF:
             # 상호작용 crush_new_santa_num
@@ -91,7 +90,7 @@ def in_range(x,y):
     return 0<x<N+1 and 0<y<N+1
 
 def check(x1,y1):
-    for i in range(1,P+1):
+    for i in santa:
         if santa[i] == [x1,y1]:
             return False, i
     return True, 0
@@ -145,12 +144,9 @@ def cow_move(cow_loc,k):
 # 산타 움직임 
 def santa_move(cow_loc,k):
     x2,y2=cow_loc
-    cnt = 0
     for i in range(1,P+1):
-        if santa[i] == [-1,-1]:  # 탈락한 산타는 움직임 없음 
-            cnt += 1
+        if santa.get(i)==None:
             continue
-        
         if faint[i]!=0:          # 기절한 산타는 움직임 없음 
             faint[i]-=1
             continue
@@ -164,8 +160,7 @@ def santa_move(cow_loc,k):
             santa_crash(i,x1,y1,k)
         else:
             santa[i]=[x1,y1]
-        
-    return cnt    
+          
         
 
 if __name__=="__main__":
@@ -188,13 +183,15 @@ if __name__=="__main__":
         # 루돌프 움직이고 
         cow_loc = cow_move(cow_loc,k)
 
-        # 1번 산타부터 P번산타까지 산타들 움직임 
-        cnt = santa_move(cow_loc,k)
-        if cnt == P:
+        if len(santa)==0:
             break
         
-        for i in range(1,P+1):
-            if santa[i] != [-1,-1]:
-                santa_score[i] += 1
+        # 1번 산타부터 P번산타까지 산타들 움직임 
+        santa_move(cow_loc,k)
+        if len(santa)==0:
+            break
+        
+        for pid in santa:
+            santa_score[pid] += 1
 
     print(*santa_score[1:])
