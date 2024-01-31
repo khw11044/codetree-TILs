@@ -13,10 +13,12 @@ def select_santa(cow):
     select_santa_loc=[0,0]
     for i in santa:
         r2,c2 = santa[i]
-        if r2==-1 and c2==-1:               # 이미 경기장 밖으로 나감 
-            continue
         dis = (r1-r2)**2 + (c1-c2)**2
-        if dis <= close_dis:
+        if dis < close_dis:
+            select_santa_num=i
+            select_santa_loc=[r2,c2]
+            close_dis = dis
+        elif dis == close_dis:
             if r2>select_santa_loc[0]:
                 select_santa_num=i
                 select_santa_loc=[r2,c2]
@@ -84,7 +86,7 @@ def santa_crash(p_num,x1,y1,k):
             Interaction(crush_new_santa_num,dict_x,dict_y)
             
         santa[p_num] = [x1,y1]   # 상호작용이랑 상관없이 이동할건 해야지
-        
+        board[x1][y1] = p_num
 
 def in_range(x,y):
     return 0<x<N+1 and 0<y<N+1
@@ -160,17 +162,25 @@ def santa_move(cow_loc,k):
             santa_crash(i,x1,y1,k)
         else:
             santa[i]=[x1,y1]
+            board[x1][y1] = i
           
-        
+def print_board(board):
+    for b in board:
+        print(b)
+    print('--------------')        
 
 if __name__=="__main__":
-    N,M,P,C,D = map(int, input().split())
+    # N:게임격자, M: 게임턴수, P:산타개수, C:루돌프 힘, D: 산타의 힘
+    N,M,P,C,D = map(int, input().split())   
     board = [[0]*(N+1) for _ in range(N+1)]
     cow_loc = list(map(int, input().split()))   # 소의 위치 (Rr, Rc)
+    board[cow_loc[0]][cow_loc[1]] = -1
+    
     santa = {}
     for _ in range(P):
-        loc,x,y=map(int, input().split())
-        santa[loc]=[x,y]
+        pid,x,y=map(int, input().split())
+        santa[pid]=[x,y]
+        board[x][y] = pid
     
 
     # 기절 상태 기록 
@@ -181,13 +191,15 @@ if __name__=="__main__":
     # 게임 플레이수 M
     for k in range(1,M+1):
         # 루돌프 움직이고 
+        board[cow_loc[0]][cow_loc[1]] = 0
         cow_loc = cow_move(cow_loc,k)
-
+        board[cow_loc[0]][cow_loc[1]] = -1
         if len(santa)==0:
             break
         
         # 1번 산타부터 P번산타까지 산타들 움직임 
         santa_move(cow_loc,k)
+        
         if len(santa)==0:
             break
         
