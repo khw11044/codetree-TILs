@@ -38,7 +38,8 @@ def Interaction(crush_new_santa_num,dict_x,dict_y):
     new_y = y + dict_y
     
     if not in_range(new_x,new_y):
-        santa[crush_new_santa_num] = [-1,-1]      # 보드 밖으로 나감
+        del santa[crush_new_santa_num]     # 보드 밖으로 나감
+        faint[crush_new_santa_num] = 0
     else:
         TF, p_num = check(crush_new_santa_num,new_x,new_y)              # 새 위치에 산타가 있는지 없는지 확인 
         if not TF:                                  # 있는경우 상호작용 
@@ -173,8 +174,8 @@ def print_board(board):
         print(b)
     print()
     print('--------------')   
-    print()     
-
+    
+    
 if __name__=="__main__":
     # N:게임격자, M: 게임턴수, P:산타개수, C:루돌프 힘, D: 산타의 힘
     N,M,P,C,D = map(int, input().split())   
@@ -198,11 +199,13 @@ if __name__=="__main__":
     #print_board(board)
     for k in range(1,M+1):
         # 루돌프 움직이고 
+        # if k == 4:
+        #     print()
         #print('time',k)
         board[cow_loc[0]][cow_loc[1]] = 0
         cow_loc = cow_move(cow_loc,k)
         board[cow_loc[0]][cow_loc[1]] = -1
-        #print_board(board)
+        # print_board(board)
         if len(santa)==0:
             break
         
@@ -217,4 +220,7 @@ if __name__=="__main__":
         for pid in santa:
             santa_score[pid] += 1
 
+        #print('santa_score',santa_score)
+        #print('>>>>>>>>>>>>>>>>>')
+        
     print(*santa_score[1:])
