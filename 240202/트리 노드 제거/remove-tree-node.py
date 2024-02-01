@@ -7,12 +7,12 @@ def DFS(x):
         return
     
     is_leaf=True
-    if len(graph[x]) != 0:
-        for y in graph[x]:
-            if is_deleted[y]:
-                continue
-            DFS(y)
-            is_leaf=False
+
+    for y in graph[x]:
+        if is_deleted[y]:
+            continue
+        DFS(y)
+        is_leaf=False
             
     if is_leaf:
         ans += 1
