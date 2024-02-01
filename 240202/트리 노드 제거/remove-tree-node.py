@@ -9,10 +9,10 @@ def DFS(x):
     is_leaf=True
     if len(graph[x]) != 0:
         for y in graph[x]:
-            is_leaf=False
             if is_deleted[y]:
                 continue
             DFS(y)
+            is_leaf=False
             
     if is_leaf:
         ans += 1
