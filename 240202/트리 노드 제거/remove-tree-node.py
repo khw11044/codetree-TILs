@@ -8,8 +8,8 @@ def DFS(x):
     
     is_leaf=True
     if len(graph[x]) != 0:
-        is_leaf=False
         for y in graph[x]:
+            is_leaf=False
             if is_deleted[y]:
                 continue
             DFS(y)
