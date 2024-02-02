@@ -1,58 +1,51 @@
 import sys
 sys.setrecursionlimit(100000)
 
-# DFS를 통해 연결된 모든 정점을 순회합니다.
-# 동시에 시작점으로부터의 거리를 같이 계산해줍니다.
-def dfs(x, total_dist):
-    # 노드 x에 연결된 간선을 살펴봅니다.
-    for y, weight in graph[x]:
-        # 아직 방문해본적이 없는 노드인 경우에만 진행합니다.
-        if not visited[y]:
-            visited[y] = True
-            dist[y] = total_dist + weight
-            dfs(y, total_dist + weight)
-            
-# 정점 x로부터 가장 멀리 있는 정점 정보를 찾아줍니다.
-def find_largest_vertex(x):
-    # visited, dist 값을 초기화해줍니다.
-    for i in range(1, n + 1):
-        visited[i] = False
-        dist[i] = 0
-    
-    # 정점 x를 시작으로 하는 DFS를 진행합니다.
-    visited[x] = True
-    dist[x] = 0
-    dfs(x, 0)
-    
-    # 정점 x로부터 가장 멀리 떨어진 정점 정보를 찾습니다.
-    farthest_dist = -1
-    farthest_vertex = -1
-    for i in range(1, n + 1):
-        if dist[i] > farthest_dist:
-            farthest_dist = dist[i]
-            farthest_vertex = i
 
-    # 가장 멀리 떨어진 정점 번호와 그때의 거리를 반환합니다.
-    return farthest_vertex, farthest_dist
+# 모든 노드의 정점을 탐색하는 DFS를 진행합니다.
+def DFS(x):
+    global max_dist, last_node
+    
+    for y, w in graph[x]:   
+        if not visited[y]:      # 이미 방문한 정점이면 스킵합니다.
+            visited[y] = True
+            dist[y] = dist[x] + w
+
+            # 현재 정점을 기준으로 가장 먼 노드를 찾습니다.
+            if dist[y] > max_dist:
+                max_dist = dist[y]
+                last_node = y
+
+            DFS(y)
+        
 
 if __name__=="__main__":
     # 변수 선언 및 입력:
     n = int(input())
-    graph =[[] for _ in range(n + 1)]
+    graph = [[] for _ in range(n + 1)]
     visited = [False] * (n + 1)
     dist = [0] * (n + 1)
+    max_dist = 0
+    last_node = 0
 
     # n - 1개의 간선 정보를 입력받습니다.
     for _ in range(n - 1):
-        x, y, d = tuple(map(int, input().split()))
-        # 간선 정보를 인접리스트에 넣어줍니다.
-        graph[x].append((y, d))
-        graph[y].append((x, d))
+        x, y, w = tuple(map(int, input().split()))
+        graph[x].append((y, w))
+        graph[y].append((x, w))
 
 
-    # 1번 노드로부터 가장 멀리 있는 노드 정보를 찾습니다.
-    f_vertex, _ = find_largest_vertex(1)	# 임의의 노도로 1번 노드를 고름 2,3,4 뭐를 해도 같은 결과 나옴
-    # 1번 노드로부터 가장 멀리 있는 노드의 가장 멀리 있는 노드의 거리를 구한다.
-    _, diameter = find_largest_vertex(f_vertex)
+    # DFS를 통해 가장 먼 노드를 찾습니다.
+    visited[1] = True
+    DFS(1)
 
-    print(diameter)
+    # 가장 먼 노드에서 시작해 다시 한번 DFS를 돌려 트리의 가장 긴 거리를 찾습니다.
+    for i in range(1, n + 1):
+        visited[i] = False
+        dist[i] = 0
+
+    visited[last_node] = True
+    DFS(last_node)
+
+    # 트리의 가장 긴 거리를 출력합니다.
+    print(max_dist)
