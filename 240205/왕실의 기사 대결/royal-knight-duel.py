@@ -69,6 +69,9 @@ def check_trap(pid):
                 scores[pid] += 1
                 if k == 0:
                     break 
+        if k == 0:
+            break 
+        
     if k == 0:
         del person_loc[pid]
         for i in range(h):
@@ -147,8 +150,8 @@ if __name__=="__main__":
         
         # 대결 대미지 적용 
         
-        #print_board(people_board)
-        #print()
+        print_board(people_board)
+        print()
     
     answer = 0
     for pid in person_loc:
