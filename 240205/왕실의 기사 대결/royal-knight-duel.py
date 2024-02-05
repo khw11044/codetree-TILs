@@ -67,8 +67,8 @@ def check_trap(pid):
             if board[r+i][c+j] == 1:    # 함정이 있으면 
                 k-=1
                 scores[pid] += 1
-                # if k == 0:
-                #     break 
+                if k == 0:
+                    break 
     if k == 0:
         del person_loc[pid]
         for i in range(h):
