@@ -127,6 +127,8 @@ if __name__=="__main__":
     # Q개의 왕의 명령 
     for _ in range(Q):
         pid,d = map(int, input().split()) # i번의 기사에게 방향 d로 한칸 이동하라는 명령 
+        if person_loc.get(pid)==None:
+            continue
         r,c,h,w,k = person_loc[pid]
         dx,dy = direction(d)
         
