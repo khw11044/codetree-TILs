@@ -31,7 +31,8 @@ def try_movement(idx, dir):
         nc[x] += dy[dir]
 
         # 경계를 벗어나는지 체크합니다.
-        if not in_range(nr[x],nc[x]):
+            
+        if nr[x] < 1 or nc[x] < 1 or nr[x] + h[x] - 1 > L or nc[x] + w[x] - 1 > L:
             return False
 
         # 대상 조각이 다른 조각이나 장애물과 충돌하는지 검사합니다.
