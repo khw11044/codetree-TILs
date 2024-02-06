@@ -2,12 +2,12 @@ from collections import deque
 
 import sys
 
-
 dx = [-1, 0, 1, 0]
 dy = [0, 1, 0, -1]
 
-def in_range(nx,ny):
-    return 1<=nx<L+1 and 1<=ny<L+1
+
+def in_range(nx,ny,h,w):
+    return 1<=nx<L+1-h and 1<=ny<L+1-w
 
 # 움직임을 시도해봅니다.
 def try_movement(idx, dir):
@@ -31,8 +31,7 @@ def try_movement(idx, dir):
         nc[x] += dy[dir]
 
         # 경계를 벗어나는지 체크합니다.
-            
-        if nr[x] < 1 or nc[x] < 1 or nr[x] + h[x] - 1 > L or nc[x] + w[x] - 1 > L:
+        if not in_range(nr[x],nc[x],h[x],w[x]):
             return False
 
         # 대상 조각이 다른 조각이나 장애물과 충돌하는지 검사합니다.
