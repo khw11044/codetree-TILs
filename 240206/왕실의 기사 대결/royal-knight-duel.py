@@ -7,7 +7,7 @@ dy = [0, 1, 0, -1]
 
 
 def in_range(nx,ny,h,w):
-    return 1<=nx<L+1-h and 1<=ny<L+1-w
+    return 1<=nx<=L+1-h and 1<=ny<=L+1-w
 
 # 움직임을 시도해봅니다.
 def try_movement(idx, dir):
