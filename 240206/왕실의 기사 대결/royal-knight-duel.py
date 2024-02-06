@@ -2,17 +2,17 @@ from collections import deque
 
 import sys
 
+
 dx = [-1, 0, 1, 0]
 dy = [0, 1, 0, -1]
 
-
+# 범위 
 def in_range(nx,ny,h,w):
     return 1<=nx<=L+1-h and 1<=ny<=L+1-w
 
 # 움직임을 시도해봅니다.
 def try_movement(idx, dir):
     q = deque()
-    is_pos = True
 
     # 초기화 작업입니다.
     for pid in range(1, N + 1):     # 1번 기사부터 N번 기사까지 
@@ -32,29 +32,32 @@ def try_movement(idx, dir):
 
         # 경계를 벗어나는지 체크합니다.
         if not in_range(nr[x],nc[x],h[x],w[x]):
-            return False
+            return False        # 범위를 벗어나는 움직임이면 못 움직임
 
-        # 대상 조각이 다른 조각이나 장애물과 충돌하는지 검사합니다.
+        # 대상 기사가 함정이나 벽과 충돌하는지 검사합니다.
         for i in range(nr[x], nr[x] + h[x]):
             for j in range(nc[x], nc[x] + w[x]):
-                if info[i][j] == 1:
-                    dmg[x] += 1
-                if info[i][j] == 2:
-                    return False
+                if info[i][j] == 1:     # 함정이면 
+                    dmg[x] += 1         # 데미지 축적 
+                if info[i][j] == 2:     # 벽이 하나라도 있으면 
+                    return False        # 못 움직임 
 
-        # 다른 조각과 충돌하는 경우, 해당 조각도 같이 이동합니다.
-        for i in range(1, N + 1):
-            if is_moved[i] or k[i] <= 0:
+        # 대상 기사가 다른 기사와 충돌하는 경우, 해당 조각도 같이 이동합니다.
+        for pid in range(1, N + 1):
+            if is_moved[pid] or k[pid] <= 0:    # 이미 움직였거나, 체력이 0이하라 체스판에 없는 경우 
+                continue                        # 안움직임 
+            # 체스판 범위에 벗어나면 못 움직임
+            if r[pid] > nr[x] + h[x] - 1 or nr[x] > r[pid] + h[pid] - 1:
                 continue
-            if r[i] > nr[x] + h[x] - 1 or nr[x] > r[i] + h[i] - 1:
-                continue
-            if c[i] > nc[x] + w[x] - 1 or nc[x] > c[i] + w[i] - 1:
+            if c[pid] > nc[x] + w[x] - 1 or nc[x] > c[pid] + w[pid] - 1:
                 continue
 
-            is_moved[i] = True
-            q.append(i)
+            is_moved[pid] = True
+            # 연쇄적으로 움직이게 하기 위해 큐를 사용 
+            q.append(pid)       # 그 다음 움직여야 할 기사 pid         
 
-    dmg[idx] = 0
+    # return False 없이 여기까지 무사히 도달했으면 
+    dmg[idx] = 0        
     return True
 
 
@@ -64,7 +67,7 @@ def move_piece(idx, move_dir):
         return                  # 끝 
 
     # 이동이 가능한 경우,
-    if try_movement(idx, move_dir):
+    if try_movement(idx, move_dir): # idx 기사가 움직일 수 있는지 확인 
         for pid in range(1, N + 1): # 기사들의 실제 위치와 체력을 업데이트한다.
             r[pid] = nr[pid]
             c[pid] = nc[pid]
