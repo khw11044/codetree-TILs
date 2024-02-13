@@ -1,4 +1,5 @@
 import sys
+
 from collections import deque
 
 moves = [(-1,0),(0,1),(1,0),(0,-1)]
@@ -67,7 +68,7 @@ def move(pid,d):
 
 if __name__=="__main__":
     L,N,Q=map(int, input().split())
-    board = [[0]*(L+2)] + [[2] + list(map(int, input().split())) + [0] for _ in range(L)] + [[0]*(L+2)]
+    board = [[0]*(L+2)] + [[0] + list(map(int, input().split())) + [0] for _ in range(L)] + [[0]*(L+2)]
     MAX_N = 31  # 최대 기사 수 
     MAX_L = 41  # 최대 체스판 크기 
     
