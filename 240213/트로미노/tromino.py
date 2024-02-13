@@ -1,5 +1,4 @@
 import sys
-
 def check(r,c):
     ans11, ans12, ans13, ans21, ans22 = 0,0,0,0,0
     # 1번 블록의 1번자세 
@@ -15,10 +14,10 @@ def check(r,c):
         ans13 = board[r][c] + board[r][c+1] + board[r+1][c+1]
     
     # 2번 블록의 1번자세 
-    if c+2<=m:
+    if c+2<m:
         ans21 = sum(board[r][c:c+3])
     # 2번 블록의 2번자세 
-    if r+2<=n:
+    if r+2<n:
         ans22 = sum(list(row[c] for row in board[r:r+3]))
     
     return max([ans11,ans12,ans13,ans21,ans22])
