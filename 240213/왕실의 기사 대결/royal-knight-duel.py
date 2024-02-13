@@ -6,7 +6,7 @@ moves = [(-1,0),(0,1),(1,0),(0,-1)]
 
 
 def in_range(nx,ny,h,w):
-    return 1<=nx<L+1-h and 1<=ny<L+1-w
+    return 1<=nx<=L+1-h and 1<=ny<=L+1-w
 
 def try_move(pid,d):
     KQ=deque()
