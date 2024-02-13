@@ -2,7 +2,6 @@ from collections import deque
 
 import sys
 
-
 dx = [-1, 0, 1, 0]
 dy = [0, 1, 0, -1]
 
@@ -79,22 +78,19 @@ if __name__=="__main__":
     L, N, Q = map(int, input().split())
     MAX_N = 31  # 최대 기사 수 
     MAX_L = 41  # 최대 체스판 크기 
-    # info = [[0 for _ in range(MAX_L)] for _ in range(MAX_L)]    # 최대크기 체스판
-    # for i in range(1, L + 1):
-    #     info[i][1:] = map(int, input().split())
     
     board = [[2]*(L+2)] + [[2] + list(map(int, input().split())) + [2] for _ in range(L)] + [[2]*(L+2)]
     
     init_k = [0 for _ in range(MAX_N)]   # 최대 개수 기사들의 초기 체력  
-    r = [0 for _ in range(MAX_N)]       # 처음 기사 위치 행 
-    c = [0 for _ in range(MAX_N)]       # 처음 기사 위치 열 
-    h = [0 for _ in range(MAX_N)]       # 기사의 범위 세로 h 
-    w = [0 for _ in range(MAX_N)]       # 기사의 범위 가로 w 
-    k = [0 for _ in range(MAX_N)]       # 기사의 체력 
-    nr = [0 for _ in range(MAX_N)]      # 기사가 움직일 위치 행 
-    nc = [0 for _ in range(MAX_N)]      # 기사가 움질일 위치 열 
-    dmg = [0 for _ in range(MAX_N)]     # 기사가 받은 데미지 
-    is_moved = [False for _ in range(MAX_N)]    # 움직임 체크 
+    r = [0]*MAX_N       # 처음 기사 위치 행 
+    c = [0]*MAX_N      # 처음 기사 위치 열 
+    h = [0]*MAX_N       # 기사의 범위 세로 h 
+    w = [0]*MAX_N       # 기사의 범위 가로 w 
+    k = [0]*MAX_N       # 기사의 체력 
+    nr = [0]*MAX_N      # 기사가 움직일 위치 행 
+    nc = [0]*MAX_N      # 기사가 움질일 위치 열 
+    dmg = [0]*MAX_N    # 기사가 받은 데미지 
+    is_moved = [False]*MAX_N    # 움직임 체크 
     
     # 기사 번호에 따른 각각의 정보를 리스트에 담는다?
     for pid in range(1, N + 1):
