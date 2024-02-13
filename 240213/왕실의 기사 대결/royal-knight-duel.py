@@ -2,8 +2,7 @@ from collections import deque
 
 import sys
 
-dx = [-1, 0, 1, 0]
-dy = [0, 1, 0, -1]
+moves = [(-1,0),(0,1),(1,0),(0,-1)]
 
 # 범위 
 def in_range(nx,ny,h,w):
@@ -17,17 +16,17 @@ def try_movement(idx, dir):
     for pid in range(1, N + 1):     # 1번 기사부터 N번 기사까지 
         dmg[pid] = 0                # 받은 데미지 0으로 초기화 
         is_moved[pid] = False       # 움직임 False로 초기화 
-        nr[pid] = r[pid]            # temporal r을 일단 현재 위치 r로 초기화
-        nc[pid] = c[pid]            # temporal r을 일단 현재 위치 r로 초기화
+        nr[pid] = r[pid]            # 새로운 위치 r을 일단 현재 위치 r로 초기화
+        nc[pid] = c[pid]            # 새로운 위치 c을 일단 현재 위치 c로 초기화
 
     q.append(idx)
-    is_moved[idx] = True            # 모체 기사를 기준으로 움직임 시작 
-
+    is_moved[idx] = True            # 현재 기사를 기준으로 움직임 시작 
+    
     while q:
         x = q.popleft()
 
-        nr[x] += dx[dir]            # 새로운, 움직일 위치 
-        nc[x] += dy[dir]
+        nr[x] += moves[dir][0]            # 새로운, 움직일 위치 
+        nc[x] += moves[dir][1]
 
         # 경계를 벗어나는지 체크합니다.
         if not in_range(nr[x],nc[x],h[x],w[x]):
@@ -45,10 +44,10 @@ def try_movement(idx, dir):
         for pid in range(1, N + 1):
             if is_moved[pid] or k[pid] <= 0:    # 이미 움직였거나, 체력이 0이하라 체스판에 없는 경우 
                 continue                        # 안움직임 
-            # pid 기사위치가 현재 기사의 새위치의 범위 보다 멀리 있으면 안옴직임 
-            if r[pid] > nr[x] + h[x] - 1 or nr[x] > r[pid] + h[pid] - 1:
+            # pid 기사위치가 현재 기사의 새 위치의 범위 밖에 있으면 안옴직임 
+            if (r[pid] > nr[x] + h[x] - 1) or (nr[x] > r[pid] + h[pid] - 1):
                 continue
-            if c[pid] > nc[x] + w[x] - 1 or nc[x] > c[pid] + w[pid] - 1:
+            if (c[pid] > nc[x] + w[x] - 1) or (nc[x] > c[pid] + w[pid] - 1):
                 continue
 
             is_moved[pid] = True
