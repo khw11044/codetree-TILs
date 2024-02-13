@@ -37,9 +37,9 @@ def try_movement(idx, dir):
         # 함정이거나 벽인지 확인 
         for i in range(nr[x], nr[x] + h[x]):
             for j in range(nc[x], nc[x] + w[x]):
-                if info[i][j] == 1:     # 함정이면 
+                if board[i][j] == 1:     # 함정이면 
                     dmg[x] += 1         # 데미지 축적 
-                if info[i][j] == 2:     # 벽이 하나라도 있으면 
+                if board[i][j] == 2:     # 벽이 하나라도 있으면 
                     return False        # 못 움직임 
 
         # 대상 기사가 다른 기사와 충돌하는 경우, 해당 조각도 같이 이동합니다.
@@ -79,8 +79,13 @@ if __name__=="__main__":
     L, N, Q = map(int, input().split())
     MAX_N = 31  # 최대 기사 수 
     MAX_L = 41  # 최대 체스판 크기 
-    info = [[0 for _ in range(MAX_L)] for _ in range(MAX_L)]    # 최대크기 체스판
-    bef_k = [0 for _ in range(MAX_N)]   # 최대 개수 기사들의 초기 체력  
+    # info = [[0 for _ in range(MAX_L)] for _ in range(MAX_L)]    # 최대크기 체스판
+    # for i in range(1, L + 1):
+    #     info[i][1:] = map(int, input().split())
+    
+    board = [[2]*(L+2)] + [[2] + list(map(int, input().split())) + [2] for _ in range(L)] + [[2]*(L+2)]
+    
+    init_k = [0 for _ in range(MAX_N)]   # 최대 개수 기사들의 초기 체력  
     r = [0 for _ in range(MAX_N)]       # 처음 기사 위치 행 
     c = [0 for _ in range(MAX_N)]       # 처음 기사 위치 열 
     h = [0 for _ in range(MAX_N)]       # 기사의 범위 세로 h 
@@ -90,14 +95,11 @@ if __name__=="__main__":
     nc = [0 for _ in range(MAX_N)]      # 기사가 움질일 위치 열 
     dmg = [0 for _ in range(MAX_N)]     # 기사가 받은 데미지 
     is_moved = [False for _ in range(MAX_N)]    # 움직임 체크 
-
-    for i in range(1, L + 1):
-        info[i][1:] = map(int, input().split())
     
     # 기사 번호에 따른 각각의 정보를 리스트에 담는다?
     for pid in range(1, N + 1):
         r[pid], c[pid], h[pid], w[pid], k[pid] = map(int, input().split())
-        bef_k[pid] = k[pid]
+        init_k[pid] = k[pid]
 
     # Q개의 왕의 명령 
     for _ in range(Q):
@@ -105,5 +107,5 @@ if __name__=="__main__":
         move_piece(idx, d)
 
     # 결과를 계산하고 출력합니다.
-    ans = sum([bef_k[i] - k[i] for i in range(1, N + 1) if k[i] > 0])
+    ans = sum([init_k[i] - k[i] for i in range(1, N + 1) if k[i] > 0])
     print(ans)
