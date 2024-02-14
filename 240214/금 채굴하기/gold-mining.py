@@ -20,10 +20,11 @@ def filter(x,y):
         for l in range(y-k,y+k+1):
             if in_range(x,l) and board[x][l]==1:
                 cnt += 1
+                
         profit = cnt*m
-        
         profit -= cost
-        if profit>0:
+        
+        if profit>=0:
             ans = max(ans, cnt)
 
     return ans
