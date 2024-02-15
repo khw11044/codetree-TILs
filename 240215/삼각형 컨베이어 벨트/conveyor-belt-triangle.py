@@ -14,6 +14,6 @@ if __name__=="__main__":
     total_list.rotate(t)
     total_list = list(total_list)
     
-    print(*total_list[:3])
-    print(*total_list[3:6])
-    print(*total_list[6:])
+    print(*total_list[:n])
+    print(*total_list[n:2*n])
+    print(*total_list[2*n:])
