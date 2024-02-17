@@ -1,6 +1,14 @@
 import sys
+
+
 def check_all_positive(x1,y1,x2,y2):
-    return all(board[i][j]>0 for i in range(x1,x2+1) for j in range(y1,y2+1))
+    ans = 0
+    for i in range(x1,x2+1):
+        for j in range(y1,y2+1):
+            if board[i][j]<=0:
+                return 0
+            ans += board[i][j]
+    return ans
                 
 
 if __name__=="__main__":
@@ -13,10 +21,10 @@ if __name__=="__main__":
         for j in range(m):
             for k in range(i,n):
                 for l in range(j,m):
-                    if check_all_positive(i,j,k,l):
-                        max_area = max(max_area, (k-i+1)*(l-j+1))
-                    else:
+                    tmp = check_all_positive(i,j,k,l)
+                    if tmp == 0:
                         break
+                    max_area = max(max_area, (k-i+1)*(l-j+1))
 
             
     print(max_area)
