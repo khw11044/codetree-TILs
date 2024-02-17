@@ -1,63 +1,40 @@
 import sys
 
+def shift(x, y, k, l, move_dir):
+    if move_dir == 0:
+        dxs, dys = [-1, -1, 1, 1], [1, -1, -1, 1]
+        move_nums = [k, l, k, l]
+    else:
+        dxs, dys = [-1, -1, 1, 1], [-1, 1, 1, -1]
+        move_nums = [l, k, l, k]
+    
+    # Step1. temp 배열에 board 값을 복사합니다.
+    for i in range(n):
+        for j in range(n):
+            temp[i][j]=board[i][j]
+
+    # Step2. 기울어진 직사각형의 경계를 쭉 따라가면서 shift
+    for dx, dy, move_num in zip(dxs, dys, move_nums):
+        for _ in range(move_num):
+            nx, ny = x + dx, y + dy
+            temp[nx][ny] = board[x][y]
+            x, y = nx, ny
+    
+    # Step3. temp값을 board에 옮겨줍니다.
+    for i in range(n):
+        for j in range(n):
+            board[i][j]=temp[i][j]
+
 
 if __name__=="__main__":
-    n=int(input())
+    # 변수 선언 및 입력:
+    n = int(input())
     board = [list(map(int, input().split())) for _ in range(n)]
-    # (r,c)를 시작으로 1번 m1만큼, 2번 m2만큼, 3번 m3만큼, 4번 m4만큼, dir==0이면 반시계, dir==1이면 시계방향 
-    r, c, m1, m2, m3, m4, dir = map(int, input().split())   
-    r,c = r-1,c-1
-    tr,tc = r, c
-    if dir==0:
-        tmp=board[r][c]
-        # 4번 변부터 이동 
-        for _ in range(m4):
-            board[r][c] = board[r-1][c-1]
-            r -= 1
-            c -= 1
-        # 3번 변 이동 
-        for _ in range(m3):
-            board[r][c] = board[r-1][c+1]
-            r -= 1
-            c += 1
-        # 2번 변이 리스트 
-        for _ in range(m2):
-            board[r][c] = board[r+1][c+1]
-            r += 1
-            c += 1
-        # 1번 변이 리스트 
-        for _ in range(m1):
-            if (r+1,c-1) == (tr,tc):
-                break
-            board[r][c] = board[r+1][c-1]
-            r += 1
-            c -= 1
-        board[r][c]=tmp
-    else:
-        tmp=board[r][c]
-        # 1번 변이 리스트 
-        for _ in range(m1):
-            board[r][c] = board[r-1][c+1]
-            r -= 1
-            c += 1
-        # 2번 변이 리스트 
-        for _ in range(m2):
-            board[r][c] = board[r-1][c-1]
-            r -= 1
-            c -= 1
-        # 3번 변 이동 
-        for _ in range(m3):
-            board[r][c] = board[r+1][c-1]
-            r += 1
-            c -= 1
-        # 4번 변부터 이동 
-        for _ in range(m4):
-            if (r+1,c+1) == (tr,tc):
-                break
-            board[r][c] = board[r+1][c+1]
-            r += 1
-            c += 1
-        board[r][c]=tmp
-        
+    temp = [[0 for _ in range(n)] for _ in range(n)]
+
+
+    x, y, m1, m2, m3, m4, d = tuple(map(int, input().split()))
+    shift(x - 1, y - 1, m1, m2, d)
+
     for b in board:
         print(*b)
