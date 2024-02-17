@@ -1,5 +1,4 @@
 import sys
-
 import copy
 
 '''
@@ -15,18 +14,6 @@ dys=[0,1,0,-1]
 def in_range(nx,ny):
     return 0<=nx<N and 0<=ny<M
 
-'''
-4 5 2 5 6 6
-2 2 1 6 1 0
-5 5 2 1 6 5
-4 2 8 8 6 5
-
-4 5 2 5 6 6
-2 3 1 6 1 0
-5 5 2 1 6 5
-4 2 8 8 6 5
-
-'''
 
 if __name__=="__main__":
     N,M,Q=map(int, input().split()) #  N*M 행렬, Q번 바람
@@ -38,17 +25,14 @@ if __name__=="__main__":
         r1,c1,r2,c2 =  r1-1,c1-1,r2-1,c2-1 
         grid = [[0]*M for _ in range(N)]
 
-        
-        # 윗변 
+         
         for j in range(c1,c2):
-            grid[r1][j+1] = board[r1][j]
-            # 아래변
-            grid[r2][j] = board[r2][j+1]
-        # 오른변 
+            grid[r1][j+1] = board[r1][j]    # 윗변
+            grid[r2][j] = board[r2][j+1]    # 아래변
+        
         for i in range(r1,r2):
-            grid[i+1][c2] = board[i][c2]
-            # 왼변
-            grid[i][c1] = board[i+1][c1]
+            grid[i+1][c2] = board[i][c2]    # 오른변 
+            grid[i][c1] = board[i+1][c1]    # 왼변
             
         # 회전한거 업데이트
         for i in range(r1,r2+1):
