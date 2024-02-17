@@ -14,6 +14,7 @@ if __name__=="__main__":
     # (r,c)를 시작으로 1번 m1만큼, 2번 m2만큼, 3번 m3만큼, 4번 m4만큼, dir==0이면 반시계, dir==1이면 시계방향 
     r, c, m1, m2, m3, m4, dir = map(int, input().split())   
     r,c = r-1,c-1
+    tr,tc = r, c
     if dir==0:
         tmp=board[r][c]
         # 4번 변부터 이동 
@@ -32,7 +33,9 @@ if __name__=="__main__":
             r += 1
             c += 1
         # 1번 변이 리스트 
-        for _ in range(m2):
+        for _ in range(m1):
+            if (r+1,c-1) == (tr,tc):
+                break
             board[r][c] = board[r+1][c-1]
             r += 1
             c -= 1
@@ -40,7 +43,7 @@ if __name__=="__main__":
     else:
         tmp=board[r][c]
         # 1번 변이 리스트 
-        for _ in range(m2):
+        for _ in range(m1):
             board[r][c] = board[r-1][c+1]
             r -= 1
             c += 1
@@ -56,6 +59,8 @@ if __name__=="__main__":
             c -= 1
         # 4번 변부터 이동 
         for _ in range(m4):
+            if (r+1,c+1) == (tr,tc):
+                break
             board[r][c] = board[r+1][c+1]
             r += 1
             c += 1
