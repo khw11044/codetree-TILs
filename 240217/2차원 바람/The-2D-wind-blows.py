@@ -32,7 +32,7 @@ if __name__=="__main__":
     N,M,Q=map(int, input().split()) #  N*M 행렬, Q번 바람
     board = [list(map(int, input().split())) for _ in range(N)]
     
-    
+    new_board = copy.deepcopy(board)    # 한꺼번에 출력하기 위해 
     for _ in range(Q):
         r1,c1,r2,c2=map(int, input().split())
         r1,c1,r2,c2 =  r1-1,c1-1,r2-1,c2-1 
@@ -57,7 +57,7 @@ if __name__=="__main__":
                     continue
                 board[i][j]=grid[i][j]
         
-        # 주변값 평균 업데이트
+        # 주변값 평균 업데이트 
         new_board = copy.deepcopy(board)    # 한꺼번에 출력하기 위해 
         for i in range(r1,r2+1):
             for j in range(c1,c2+1):
@@ -70,6 +70,8 @@ if __name__=="__main__":
                         new_board[i][j] += board[ni][nj]
                         
                 new_board[i][j] = new_board[i][j]//ans
-              
+        
+        board = copy.deepcopy(new_board)    # 한꺼번에 출력하기 위해
+        
     for b in new_board:
         print(*b)
