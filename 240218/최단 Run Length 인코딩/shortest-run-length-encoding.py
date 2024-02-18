@@ -22,6 +22,11 @@ def get_length(arr):
 if __name__=="__main__":
     strings = list(map(str, input()))
     N = len(strings)
+    
+    if strings.count(str(strings[0])) == N:
+        print(len(str(strings[0])+str(N)))
+        sys.exit()
+    
     strings = deque(strings)
     
     init_length = get_length(strings)
