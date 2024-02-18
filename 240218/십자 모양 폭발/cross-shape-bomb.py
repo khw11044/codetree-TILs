@@ -1,6 +1,5 @@
 import sys
 
-
 dxs=[-1,0,1,0]
 dys=[0,1,0,-1]
 
@@ -10,7 +9,7 @@ def in_range(nx,ny):
 def boom(x,y):
     power = board[x][y]
     board[x][y] = 0
-    explosion=[]
+    explosion=[[x,y]]
     for dx,dy in zip(dxs,dys):
         for t in range(1,power):
             nx=x+dx*t
@@ -21,7 +20,7 @@ def boom(x,y):
                     continue
                 explosion.append([nx,ny])
         
-
+    explosion.sort()
     for i,j in explosion:
         for k in range(i,0,-1):
             board[k][j] = board[k-1][j]
