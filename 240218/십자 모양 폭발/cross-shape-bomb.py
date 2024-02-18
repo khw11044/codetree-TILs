@@ -12,9 +12,9 @@ def boom(x,y):
     board[x][y] = 0
     explosion=[]
     for dx,dy in zip(dxs,dys):
-        for _ in range(power):
-            nx=x+dx
-            ny=y+dy
+        for t in range(1,power):
+            nx=x+dx*t
+            ny=y+dy*t
             if in_range(nx,ny):
                 board[nx][ny]=0
                 if [nx,ny] in explosion:
