@@ -1,6 +1,5 @@
 import sys
 
-
 if __name__=="__main__":
     N,M=map(int, input().split())
     arr=[]
@@ -8,11 +7,11 @@ if __name__=="__main__":
         boom=int(input())
         arr.append(boom)
     
-    if len(arr)==M:
-        print(0)
-        sys.exit()
+    # if len(arr)==M:
+    #     print(0)
+    #     sys.exit()
     
-    while len(arr)>1:
+    while arr:
         cnt=0
         delete_list=[]
         for i in range(len(arr)-1):
@@ -24,7 +23,10 @@ if __name__=="__main__":
                     cnt=0
         
         if cnt>=M-1:
-            delete_list += list(range(i+1-cnt,i+1+1))
+            if i>0:
+                delete_list += list(range(i+1-cnt,i+1+1))
+            elif i==0:
+                delete_list += list(range(i-cnt,i+1))
             cnt=0
         
         if not delete_list:
