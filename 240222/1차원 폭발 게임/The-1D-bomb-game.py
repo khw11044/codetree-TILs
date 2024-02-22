@@ -2,45 +2,35 @@ import sys
 
 if __name__=="__main__":
     N,M=map(int, input().split())
-    arr=[]
-    for i in range(N):
-        boom=int(input())
-        arr.append(boom)
-    
-    # if len(arr)==M:
-    #     print(0)
-    #     sys.exit()
+    arr = []
+    for _ in range(N):
+        arr.append(int(input()))
     
     while arr:
-        cnt=0
         delete_list=[]
-        for i in range(len(arr)-1):
-            if arr[i]==arr[i+1]:
-                cnt+=1
+        cnt=1
+        for i in range(1,len(arr)):
+            if arr[i-1]==arr[i]:
+                cnt += 1
             else:
-                if cnt>=M-1:
-                    delete_list += list(range(i-cnt,i+1))
+                if cnt>=M:
+                    delete_list+=list(range(i-cnt,i))
                     cnt=0
         
-        if cnt>=M-1:
-            if i>0:
-                delete_list += list(range(i+1-cnt,i+1+1))
-            elif i==0:
-                delete_list += list(range(i-cnt,i+1))
-            cnt=0
+        if cnt>=M:
+            delete_list+=list(range(len(arr)-cnt,len(arr)))
         
-        if not delete_list:
-            break
-        
-        new_arr=[]
-        for i in range(len(arr)):
-            if i in delete_list:
-                continue
-            new_arr.append(arr[i])
-        
-        arr = new_arr
-                 
+        if delete_list:
+            new_arr=[]
+            for j in range(len(arr)):
+                if j in delete_list:
+                    continue
+                new_arr.append(arr[j])
             
+            arr = new_arr
+        else:
+            break
+    
     print(len(arr))
     if arr:
         for a in arr:
