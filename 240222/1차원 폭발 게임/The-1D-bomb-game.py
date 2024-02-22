@@ -14,3 +14,6 @@ if __name__=="__main__":
         else:
             arr.append(boom)
     print(len(arr))
+    if arr:
+        for a in arr:
+            print(a)
