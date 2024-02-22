@@ -15,7 +15,7 @@ if __name__=="__main__":
             else:
                 if cnt>=M:
                     delete_list+=list(range(i-cnt,i))
-                    cnt=0
+                    cnt=1
         
         if cnt>=M:
             delete_list+=list(range(len(arr)-cnt,len(arr)))
