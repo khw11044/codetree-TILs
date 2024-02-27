@@ -1,6 +1,7 @@
 import sys
 import copy
 
+
 def explosions():
     global board, answer
     did_explosion=False
@@ -19,10 +20,11 @@ def explosions():
                     
                         cnt=1 
         if cnt>=M:
-            answer -= cnt
-            did_explosion=True
             for l in range(cnt):
-                board[N-2+1-l][j]=0
+                if board[N-2+1-l][j] != 0:
+                    board[N-2+1-l][j]=0
+                    did_explosion=True
+                    answer -= 1
     
     return did_explosion
 
